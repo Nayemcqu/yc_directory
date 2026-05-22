@@ -1,6 +1,57 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+
+const workSans=localFont({
+src:[
+  {
+    path:'./fonts/workSans-Black.ttf',
+    weight:'900',
+    style:'normal'
+  },
+ {
+    path:'./fonts/workSans-ExtraBold.ttf',
+    weight:'800',
+    style:'normal'
+  },
+   {
+    path:'./fonts/workSans-Bold.ttf',
+    weight:'700',
+    style:'normal'
+  }, {
+    path:'./fonts/workSans-SemiBold.ttf',
+    weight:'600',
+    style:'normal'
+  }, {
+    path:'./fonts/workSans-Medium.ttf',
+    weight:'500',
+    style:'normal'
+  }, {
+    path:'./fonts/workSans-Regular.ttf',
+    weight:'400',
+    style:'normal'
+  }, {
+    path:'./fonts/workSans-Thin.ttf',
+    weight:'300',
+    style:'normal'
+  },
+   {
+    path:'./fonts/workSans-Light.ttf',
+    weight:'200',
+    style:'normal'
+  },
+{
+    path:'./fonts/workSans-ExtraLight.ttf',
+    weight:'100',
+    style:'normal'
+  },
+],
+  variable: "--font-work-sans",
+})
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +76,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn(workSans.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className=" flex flex-col ">{children}</body>
     </html>
   );
 }
