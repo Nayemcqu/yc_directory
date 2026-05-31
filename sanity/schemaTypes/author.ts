@@ -27,7 +27,10 @@ defineField({
     name:'image',
     type:'url'
 }),
-
+defineField({
+    name:'bio',
+    type:'text'
+})
 
   ],
 preview:{
@@ -35,5 +38,6 @@ preview:{
         title:'name'
     } 
 }
+
 
 })
