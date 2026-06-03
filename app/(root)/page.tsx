@@ -3,26 +3,13 @@ import SearchForm from "@/components/SearchForm";
 import StartupCard from "@/components/StartupCard";
 import { StartupQuery } from "@/sanity/lib/queries";
 import { client } from "@/sanity/lib/client";
+
  export default async function Home({searchParams}:{searchParams:Promise<{query?:string}>}) {
 
 const query=(await searchParams).query;
 
-const posts=await client.fetch
+const posts=await client.fetch(StartupQuery);
 
-console.log(JSON.stringify(posts,null,2));
-
-// const posts=[{
-
-// _createdAt:new Date(),  
-// views:55,
-// author:{_id:1,name:'Nayem'},
-// _id:1,
-// description:'this is a description',
-// image:"https://images.stockcake.com/public/f/c/8/fc8a990a-5fea-47ff-9ab6-ba5dea628759_large/cute-robotic-companion-stockcake.jpg",
-// category:"Robots",
-// title:"We Robots"
-
-// }]
 
 
   return (
