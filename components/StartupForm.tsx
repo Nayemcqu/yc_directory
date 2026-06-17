@@ -6,12 +6,47 @@ import { Textarea } from './ui/textarea';
 import MDEditor, { TextAreaTextApi } from '@uiw/react-md-editor';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
-const StartupForm = () => {
+import {useActionState} from 'react'
+import { formSchema } from '@/lib/validation';
+
+ const StartupForm = () => {
 
 const [errors,setErrors] =useState<Record<string, string>>({});
 const [pitch,setPitch] =useState<string>('');
 
-const isPending=false;
+
+const handleFormSubmit=async(prevState:any, formData:FormData)=>{
+try{
+const formValues={
+  title:formData.get("title") as string,
+  description:formData.get("description") as string,
+  category:formData.get("category") as string,
+  link: formData.get("link") as string,
+  pitch,
+}
+
+await formSchema.parseAsync(formValues);
+
+console.log(formValues);
+//const result= await createIdea(prevState,formData,pitch);
+//console.log(result)
+
+}
+catch(error){
+
+
+}
+finally{
+
+}
+
+}
+
+const [state,formAction,isPending]=useActionState(handleFormSubmit,{error:"",status:"INITIAL"});
+
+
+
+
 
 return <form  action={()=>{}} className="startup-form">
 <div>
