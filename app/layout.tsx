@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -78,7 +79,10 @@ export default function RootLayout({
       lang="en"
       className={cn(workSans.variable, "font-sans", inter.variable)}
     >
-      <body className=" flex flex-col ">{children}</body>
+      <body className=" flex flex-col ">{children}
+<Toaster/>
+
+      </body>
     </html>
   );
 }

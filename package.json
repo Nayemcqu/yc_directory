@@ -10,6 +10,8 @@
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
   },
   "packageManager": "npm@10.5.2",
+
+ 
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.26.0",
@@ -30,6 +32,7 @@
     "sanity-plugin-markdown": "^8.0.5",
     "server-only": "^0.0.1",
     "shadcn": "^4.7.0",
+    "slugify": "^1.6.9",
     "sonner": "^2.0.7",
     "styled-components": "^6.4.2",
     "tailwind-merge": "^3.6.0",

@@ -8,13 +8,16 @@ import { Button } from './ui/button';
 import { Send } from 'lucide-react';
 import {useActionState} from 'react'
 import { formSchema } from '@/lib/validation';
+import {z} from "zod"
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { createPitch } from '@/lib/actions';
 
- const StartupForm = () => {
+const StartupForm = () => {
 
 const [errors,setErrors] =useState<Record<string, string>>({});
 const [pitch,setPitch] =useState<string>('');
-
-
+const  router=useRouter();
 const handleFormSubmit=async(prevState:any, formData:FormData)=>{
 try{
 const formValues={
@@ -28,17 +31,39 @@ const formValues={
 await formSchema.parseAsync(formValues);
 
 console.log(formValues);
-//const result= await createIdea(prevState,formData,pitch);
-//console.log(result)
+const result= await createPitch(prevState,formData,pitch);
+console.log(result)
 
+if(result.status=='SUCCESS'){
+    toast("success");  
+}
+router.push(`/startup/${result._id}`);
+return result;
 }
 catch(error){
+  if (error instanceof z.ZodError) {
+    const fieldErrors: Record<string, string> = {};
 
+    error.issues.forEach((issue) => {
+      fieldErrors[issue.path[0].toString()] =
+        issue.message;
+    });
+
+    setErrors(fieldErrors);
+    toast("please check your inputs and try again later");
+return { ...prevState,error:"validation failed", status:"Error"}; 
+
+  }
+    toast("please check your inputs and try again later");
+
+  return {
+    ...prevState,
+    error:"An unexpected error has occured",
+    status:"Error"
+  }
 
 }
-finally{
 
-}
 
 }
 
@@ -48,7 +73,7 @@ const [state,formAction,isPending]=useActionState(handleFormSubmit,{error:"",sta
 
 
 
-return <form  action={()=>{}} className="startup-form">
+return <form  action={formAction} className="startup-form" >
 <div>
 <label htmlFor="title" className="startup-form_label"> Title</label>
 <Input id="title"  name='title' className="startup-form_input" placeholder="Enter startup title" required/>
