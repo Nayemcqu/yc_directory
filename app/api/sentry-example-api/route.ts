@@ -1,5 +1,4 @@
 import * as Sentry from "@sentry/nextjs";
-
 class SentryExampleAPIError extends Error {
   constructor(message: string | undefined) {
     super(message);
