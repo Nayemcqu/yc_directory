@@ -9,9 +9,7 @@ import { auth } from "@/auth";
 
 const query=(await searchParams).query;
 const params={search: query || null};
-const session=await auth();
 
-console.log(session?.id)
 
 const posts=await client.fetch(StartupQuery,params);
 
