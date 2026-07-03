@@ -11,7 +11,7 @@ return parseServerActionResponse({error:"Not Signed in", status:"ERROR"})
 
      }
 
-const {title,description,category,link}=Object.fromEntries(
+const {title,description,category,image}=Object.fromEntries(
 Array.from(form).filter(([key])=> key!=='pitch'),
 )
 
@@ -25,7 +25,7 @@ const startup={
 title,
 description,
 category,
-link,
+image,
 pitch,
 slug:{
     _type:"slug",

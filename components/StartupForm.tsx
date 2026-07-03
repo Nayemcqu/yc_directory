@@ -24,18 +24,18 @@ const formValues={
   title:formData.get("title") as string,
   description:formData.get("description") as string,
   category:formData.get("category") as string,
-  link: formData.get("link") as string,
+  image: formData.get("image") as string,
   pitch,
 }
 
 await formSchema.parseAsync(formValues);
 
-console.log(formValues);
+
 const result= await createPitch(prevState,formData,pitch);
-console.log(result)
+
 
 if(result.status=='SUCCESS'){
-    toast("success");  
+    toast("Startup pitch submitted successfully!");  
 }
 router.push(`/startup/${result._id}`);
 return result;
@@ -96,10 +96,10 @@ return <form  action={formAction} className="startup-form" >
 </div>
 
 <div>
-<label htmlFor="link" className="startup-form_label"> Image URL</label>
-<Input id="link"  name='link' className="startup-form_input" placeholder="Enter image URL" required/>
+<label htmlFor="image" className="startup-form_label"> Image URL</label>
+<Input id="image"  name='image' className="startup-form_input" placeholder="Enter image URL" required/>
 
-{errors.link &&<p className='startup-form_error'>{errors.link}</p>}
+{errors.image &&<p className='startup-form_error'>{errors.image}</p>}
 </div>
 
 <div data-color-mode="dark">

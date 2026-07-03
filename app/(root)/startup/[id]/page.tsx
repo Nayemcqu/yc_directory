@@ -8,13 +8,14 @@ import Image from 'next/image';
 import markdownit from 'markdown-it'
 import { Skeleton } from '@/components/ui/skeleton';
 import View from '@/components/view';
-
+import { playlist_By_slug_QUERY } from '@/sanity/lib/queries';
+import StartupCard, { StartupTypeCard } from '@/components/StartupCard';
 const page =async ({params}:{params:Promise<{id:string}>}) => {
  
  const id=(await params).id
  const md=markdownit();
 
-const post=await client.fetch(STARTUP_BY_ID_QUERY, { id });
+const [{select:editorPosts},post]=await Promise.all([client.fetch(playlist_By_slug_QUERY, { slug: 'editor-picks' }),await client.fetch(STARTUP_BY_ID_QUERY, { id })])
 
 if(!post) return  notFound();
 
@@ -62,7 +63,22 @@ return<>
 <hr className="divider" />
 
 {/* Editor selected Startups */}
+{editorPosts?.length>0 && (
+<div className="max-w-4xl mx-auto space-y-5">
 
+<p className="text-30-bold">Editor selected Startups</p>
+
+<ul className="mt-7 card_grid-sm">
+{editorPosts?.map((post:StartupTypeCard,index:number
+)=>(<StartupCard key={index} post={post} />))
+
+}
+
+</ul>
+
+</div>
+
+)}
 
 </section>
     

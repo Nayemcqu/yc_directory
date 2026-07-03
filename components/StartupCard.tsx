@@ -6,6 +6,9 @@ import Image from 'next/image'
 import { Button } from './ui/button'
 import { Author, Startup } from '@/sanity/types'
 export type StartupTypeCard=Omit<Startup,"author"> & {author?:Author};
+import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+
 const StartupCard = ({post}:{post:StartupTypeCard}) => {
  
  const {_createdAt
@@ -49,16 +52,16 @@ const StartupCard = ({post}:{post:StartupTypeCard}) => {
 </Link>
 </div>
 
-<Link href={`/users/${author?._id}`}>
-<Image src="https://placehold.co/48x48" alt="placeholder" width={48} height={48} className='rounded-full' />
+<Link href={`/user/${author?._id}`}>
+<Image src={author?.image!} alt={author?.name!} width={48} height={48} className='rounded-full' />
 </Link>
 </div>
 
-<Link href={`/users/${_id}`}>
+<Link href={`/startup/${_id}`}>
 <p className='startup-card_desc'>
     {description}
      </p>
-<img src={image} alt='robot' className='startup-card_img' />
+<Image src={image || '/placeholder.png'} width={300} height={164} alt='robot' className='startup-card_img' />
 
 </Link>
 
@@ -80,5 +83,19 @@ Deatils
     </li>
   )
 }
+
+export const StartupCardSkeleton=()=>(
+<>
+{[0,1,2,3,4].map((index:number)=>(
+
+<li key={cn('skeleton',index)}>
+<Skeleton className="startup-card-skeleton"/>
+</li>
+
+))}
+
+</>
+    
+)
 
 export default StartupCard

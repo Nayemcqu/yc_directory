@@ -7,6 +7,7 @@ import Image from 'next/image';
 import UserStartups from '@/components/UserStartups';
 import { Suspense } from 'react';
 import ProfileHeader from '@/components/ProfileHeader';
+import { StartupCardSkeleton } from '@/components/StartupCard';
 
 const Page =async ({params}:{params:Promise<{id:string}>}) => {
   
@@ -48,7 +49,7 @@ className='profile_image'
     <ProfileHeader id={id}/>
 </Suspense>
 <ul className='card_grid-sm '>
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<StartupCardSkeleton/>}>
 <UserStartups id={id}/>
     </Suspense>
 
@@ -62,10 +63,7 @@ className='profile_image'
   )
 }
 
-export const StartupCardSkeleton=()=>{
 
-    
-}
 
 
 export default Page
