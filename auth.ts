@@ -1,50 +1,68 @@
-import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
- import { client } from "@/sanity/lib/client"
-import { AUTHOR_BY_GITHUB_ID_QUERY } from "./sanity/lib/queries";
-import { writeClient } from "./sanity/lib/write-client";
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
 
+import { client } from "@/sanity/lib/client";
+import { AUTHOR_BY_GITHUB_ID_QUERY } from "@/sanity/lib/queries";
+import { writeClient } from "@/sanity/lib/write-client";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [GitHub],
-callbacks:{
-  async signIn({ user:{name,email,image},account,profile:{login,id,bio}, }){
-    const existingUser=await client.withConfig({useCdn:false})
-    .fetch(AUTHOR_BY_GITHUB_ID_QUERY,{id:id});
+  providers: [
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
+    }),
+  ],
 
-if(!existingUser){
-  await writeClient.create({
-    _type:'author',
-    id:id,
-    name:name,
-    username:login,
-    email:email,
-    image:image,
-    bio:bio ||" "
-})
+  callbacks: {
+    async signIn({ user, profile }) {
+      if (!profile) return false;
 
-}
-return true;
+      const githubProfile = profile as {
+        id: number;
+        login: string;
+        bio?: string;
+      };
 
+      const existingUser = await client
+        .withConfig({ useCdn: false })
+        .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
+          id: githubProfile.id,
+        });
+
+      if (!existingUser) {
+        await writeClient.create({
+          _type: "author",
+          id: githubProfile.id,
+          name: user.name,
+          username: githubProfile.login,
+          email: user.email,
+          image: user.image,
+          bio: githubProfile.bio || "",
+        });
+      }
+
+      return true;
+    },
+
+    async jwt({ token, account, profile }) {
+      if (account && profile) {
+        const githubProfile = profile as any;
+
+        const user = await client
+          .withConfig({ useCdn: false })
+          .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
+            id: githubProfile.id,
+          });
+
+        token.id = user?._id;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.id = token.id as string;
+      return session;
+    },
   },
-
-
-
-
-async jwt({ token, account, profile }) {
-
-    if (account && profile) {
-    const user=await client.withConfig({useCdn:false}).fetch(AUTHOR_BY_GITHUB_ID_QUERY,{id:profile.id});
-    
-    token.id = user?._id;
-    }
-    return token;
-  },
-async session({ session, token }) {
-
-  Object.assign(session, { id: token.id });
-return session;
-}
-
-}
-})
+});
