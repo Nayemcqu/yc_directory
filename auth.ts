@@ -1,3 +1,4 @@
+
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
@@ -17,11 +18,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, profile }) {
       if (!profile) return false;
 
-      const githubProfile = profile as {
-        id: number;
-        login: string;
-        bio?: string;
-      };
+      const githubProfile = profile as unknown as {
+  id: number;
+  login: string;
+  bio?: string;
+};
 
       const existingUser = await client
         .withConfig({ useCdn: false })
