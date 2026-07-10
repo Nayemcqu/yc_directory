@@ -15,7 +15,7 @@ const page =async ({params}:{params:Promise<{id:string}>}) => {
  const id=(await params).id
  const md=markdownit();
 
-const [{select:editorPosts},post]=await Promise.all([client.fetch(playlist_By_slug_QUERY, { slug: 'editor-picks' }),await client.fetch(STARTUP_BY_ID_QUERY, { id })])
+const [{select:editorPosts},post]=await Promise.all([client.fetch(playlist_By_slug_QUERY, { slug: 'editor-picks' }), client.fetch(STARTUP_BY_ID_QUERY, { id })])
 
 if(!post) return  notFound();
 

@@ -13,7 +13,7 @@ images:{
     }
   ]
 },
- cacheComponents: true,
+
 devIndicators: {
 position:'bottom-right'
 }
